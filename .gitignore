@@ -1,0 +1,13 @@
+# Ignorar o ambiente virtual do Python
+venv/
+.venv/
+env/
+
+# Ignorar arquivos temporários do Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Ignorar arquivos do sistema operacional Mac
+.DS_Store
