@@ -44,9 +44,9 @@ jobs:
         with:
           name: python-app
 
-      - name: Deploy to Azure Web App via Azure GitHub Action Token
+      - name: Deploy to Azure Web App
         uses: azure/webapps-deploy@v3
         with:
           app-name: 'ecoorbit-joaolucas'
-          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_ECORBIT }}
+          publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_AC059A5B6E7E4087B206676D36C242F0 }}
           package: 'deploy.zip'
