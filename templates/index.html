@@ -1,107 +1,355 @@
 <!DOCTYPE html>
-<html lang="pt-br">
+<html lang="pt-BR">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EcoOrbit - Monitoramento Orbital Sustentável</title>
-    <style>
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-color: #0f172a;
-            color: #f8fafc;
-            margin: 0;
-            padding: 0;
-        }
-        header {
-            background-color: #1e293b;
-            padding: 20px;
-            text-align: center;
-            border-bottom: 3px solid #10b981;
-        }
-        h1 { margin: 0; color: #38bdf8; }
-        .badge {
-            background-color: #10b981;
-            color: #0f172a;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-weight: bold;
-            font-size: 0.9rem;
-        }
-        .container {
-            max-width: 900px;
-            margin: 40px auto;
-            padding: 20px;
-        }
-        .section {
-            background-color: #1e293b;
-            padding: 30px;
-            border-radius: 8px;
-            margin-bottom: 25px;
-            border: 1px solid rgba(56, 189, 248, 0.2);
-        }
-        h2 { color: #38bdf8; margin-top: 0; }
-        .grid {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 20px;
-        }
-        .data-card {
-            background-color: #0f172a;
-            padding: 15px;
-            border-radius: 6px;
-            border-left: 4px solid #38bdf8;
-        }
-        .data-card strong { color: #94a3b8; display: block; font-size: 0.85rem; }
-        .data-card span { font-size: 1.1rem; color: #f8fafc; font-weight: 500; }
-        footer {
-            text-align: center;
-            padding: 20px;
-            color: #64748b;
-            font-size: 0.9rem;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>EcoOrbit — Monitoramento Climático via Satélite | ODS 13</title>
+<style>
+  :root{
+    --clima-verde:#3F7E44;        /* verde oficial ODS 13 */
+    --clima-verde-esc:#2c5e31;
+    --clima-verde-claro:#e8f2e9;
+    --atmosfera:#1d6a96;          /* azul atmosfera/dados */
+    --atmosfera-claro:#eaf3f8;
+    --ambar:#d98324;              /* alerta térmico */
+    --ambar-claro:#fbf0e2;
+    --papel:#f7f8f5;              /* off-white institucional */
+    --branco:#ffffff;
+    --tinta:#1a2420;              /* texto principal */
+    --tinta-suave:#5a655f;        /* texto secundário */
+    --linha:#e3e7e1;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  body{
+    font-family:'Segoe UI',system-ui,-apple-system,sans-serif;
+    background:var(--papel);
+    color:var(--tinta);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+  }
+  .container{max-width:1180px;margin:0 auto;padding:0 24px}
+
+  /* ===== TOPO ===== */
+  header{
+    background:var(--branco);
+    border-bottom:1px solid var(--linha);
+    position:sticky;top:0;z-index:50;
+  }
+  .nav{display:flex;align-items:center;justify-content:space-between;height:68px}
+  .logo{display:flex;align-items:center;gap:11px;font-weight:700;font-size:1.18rem;letter-spacing:-.02em}
+  .logo .orb{
+    width:30px;height:30px;border-radius:50%;
+    background:radial-gradient(circle at 32% 30%,#6fb574,var(--clima-verde) 60%,var(--clima-verde-esc));
+    box-shadow:0 0 0 4px var(--clima-verde-claro);
+    position:relative;flex-shrink:0;
+  }
+  .logo .orb::after{
+    content:"";position:absolute;inset:0;border-radius:50%;
+    border:1.5px solid rgba(255,255,255,.55);
+    border-bottom-color:transparent;border-left-color:transparent;
+    animation:orbit 7s linear infinite;
+  }
+  @keyframes orbit{to{transform:rotate(360deg)}}
+  .nav-tag{
+    font-size:.72rem;font-weight:600;color:var(--clima-verde-esc);
+    background:var(--clima-verde-claro);padding:5px 12px;border-radius:20px;
+    letter-spacing:.03em;
+  }
+
+  /* ===== HERO ===== */
+  .hero{padding:72px 0 56px;position:relative;overflow:hidden}
+  .hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:54px;align-items:center}
+  .eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    font-size:.78rem;font-weight:700;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--clima-verde-esc);margin-bottom:20px;
+  }
+  .eyebrow::before{content:"";width:26px;height:2px;background:var(--clima-verde)}
+  .hero h1{
+    font-size:3.05rem;line-height:1.08;letter-spacing:-.025em;font-weight:800;
+    margin-bottom:20px;
+  }
+  .hero h1 .destaque{
+    color:var(--clima-verde);position:relative;white-space:nowrap;
+  }
+  .hero p.lead{font-size:1.13rem;color:var(--tinta-suave);max-width:520px;margin-bottom:30px}
+  .cta-row{display:flex;gap:14px;flex-wrap:wrap;align-items:center}
+  .btn{
+    display:inline-flex;align-items:center;gap:9px;
+    padding:13px 24px;border-radius:9px;font-weight:600;font-size:.96rem;
+    text-decoration:none;transition:transform .18s,box-shadow .18s;cursor:pointer;border:none;
+  }
+  .btn-primary{background:var(--clima-verde);color:#fff;box-shadow:0 6px 18px rgba(63,126,68,.28)}
+  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 9px 24px rgba(63,126,68,.34)}
+  .btn-ghost{background:transparent;color:var(--tinta);border:1.5px solid var(--linha)}
+  .btn-ghost:hover{border-color:var(--clima-verde);color:var(--clima-verde-esc)}
+
+  /* SIGNATURE: medidor de anomalia térmica */
+  .anomalia{
+    background:var(--branco);border:1px solid var(--linha);border-radius:20px;
+    padding:30px;box-shadow:0 12px 40px rgba(26,36,32,.07);position:relative;
+  }
+  .anomalia .topo{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px}
+  .anomalia .rotulo{font-size:.74rem;font-weight:700;letter-spacing:.05em;text-transform:uppercase;color:var(--tinta-suave)}
+  .pulso{display:flex;align-items:center;gap:7px;font-size:.74rem;font-weight:600;color:var(--ambar)}
+  .pulso .dot{width:8px;height:8px;border-radius:50%;background:var(--ambar);animation:pisca 1.8s ease-in-out infinite}
+  @keyframes pisca{0%,100%{opacity:1;box-shadow:0 0 0 0 rgba(217,131,36,.5)}50%{opacity:.5;box-shadow:0 0 0 7px rgba(217,131,36,0)}}
+  .anomalia .valor{font-size:3.6rem;font-weight:800;letter-spacing:-.03em;line-height:1;color:var(--ambar);margin:6px 0 2px}
+  .anomalia .valor span{font-size:1.5rem;vertical-align:super}
+  .anomalia .sub{font-size:.9rem;color:var(--tinta-suave);margin-bottom:20px}
+  .barra-termica{height:11px;border-radius:6px;background:linear-gradient(90deg,#3F7E44,#9ec94f,#e8c34a,#d98324,#c0392b);position:relative;overflow:hidden}
+  .barra-termica .marcador{
+    position:absolute;top:-4px;width:3px;height:19px;background:var(--tinta);border-radius:2px;
+    left:0;animation:varre 3.5s ease-in-out forwards;
+  }
+  @keyframes varre{from{left:0}to{left:72%}}
+  .escala{display:flex;justify-content:space-between;font-size:.68rem;color:var(--tinta-suave);margin-top:8px}
+
+  /* ===== FAIXA DADOS ===== */
+  .dashboard{padding:20px 0 64px}
+  .secao-titulo{text-align:center;max-width:620px;margin:0 auto 42px}
+  .secao-titulo .eyebrow{justify-content:center}
+  .secao-titulo h2{font-size:2.05rem;letter-spacing:-.02em;font-weight:800;margin-bottom:12px}
+  .secao-titulo p{color:var(--tinta-suave)}
+  .metricas{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+  .card{
+    background:var(--branco);border:1px solid var(--linha);border-radius:15px;padding:24px;
+    transition:transform .2s,box-shadow .2s;position:relative;overflow:hidden;
+  }
+  .card:hover{transform:translateY(-4px);box-shadow:0 14px 32px rgba(26,36,32,.08)}
+  .card::before{content:"";position:absolute;top:0;left:0;width:100%;height:3px;opacity:.85}
+  .card.verde::before{background:var(--clima-verde)}
+  .card.azul::before{background:var(--atmosfera)}
+  .card.ambar::before{background:var(--ambar)}
+  .card .icone{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;margin-bottom:16px;font-size:1.25rem}
+  .card.verde .icone{background:var(--clima-verde-claro)}
+  .card.azul .icone{background:var(--atmosfera-claro)}
+  .card.ambar .icone{background:var(--ambar-claro)}
+  .card .num{font-size:2.15rem;font-weight:800;letter-spacing:-.03em;line-height:1}
+  .card.verde .num{color:var(--clima-verde-esc)}
+  .card.azul .num{color:var(--atmosfera)}
+  .card.ambar .num{color:var(--ambar)}
+  .card .num .u{font-size:1.05rem;font-weight:700}
+  .card .nome{font-size:.95rem;font-weight:600;margin-top:7px}
+  .card .desc{font-size:.8rem;color:var(--tinta-suave);margin-top:4px}
+
+  /* ===== CONEXÃO ESPACIAL ===== */
+  .conexao{background:var(--branco);border-top:1px solid var(--linha);border-bottom:1px solid var(--linha);padding:64px 0}
+  .conexao-grid{display:grid;grid-template-columns:.9fr 1.1fr;gap:50px;align-items:center}
+  .orbita-vis{
+    aspect-ratio:1;max-width:330px;margin:0 auto;position:relative;
+    display:flex;align-items:center;justify-content:center;
+  }
+  .planeta{
+    width:120px;height:120px;border-radius:50%;
+    background:radial-gradient(circle at 35% 30%,#6fb574,var(--clima-verde) 55%,var(--clima-verde-esc));
+    box-shadow:inset -8px -8px 22px rgba(0,0,0,.25),0 0 40px rgba(63,126,68,.25);
+  }
+  .anel{position:absolute;border:1.5px dashed var(--linha);border-radius:50%}
+  .anel.a1{width:210px;height:210px;animation:gira 14s linear infinite}
+  .anel.a2{width:290px;height:290px;animation:gira 22s linear infinite reverse}
+  @keyframes gira{to{transform:rotate(360deg)}}
+  .satelite{position:absolute;width:15px;height:15px;border-radius:4px;background:var(--atmosfera);top:-7px;left:50%;margin-left:-7px;box-shadow:0 0 12px var(--atmosfera)}
+  .satelite.s2{background:var(--ambar);box-shadow:0 0 12px var(--ambar)}
+  .conexao h2{font-size:1.95rem;letter-spacing:-.02em;font-weight:800;margin-bottom:16px}
+  .conexao p{color:var(--tinta-suave);margin-bottom:16px}
+  .lista-check{list-style:none;display:grid;gap:12px;margin-top:8px}
+  .lista-check li{display:flex;gap:11px;align-items:flex-start;font-size:.95rem}
+  .lista-check .mk{
+    width:21px;height:21px;border-radius:50%;background:var(--clima-verde-claro);color:var(--clima-verde-esc);
+    display:flex;align-items:center;justify-content:center;font-size:.7rem;font-weight:700;flex-shrink:0;margin-top:2px;
+  }
+
+  /* ===== SELO ODS ===== */
+  .ods{padding:64px 0;text-align:center}
+  .selo{
+    display:inline-flex;align-items:center;gap:18px;background:var(--clima-verde);
+    color:#fff;padding:22px 30px;border-radius:16px;box-shadow:0 14px 38px rgba(63,126,68,.3);
+    max-width:560px;text-align:left;
+  }
+  .selo .n{font-size:2.6rem;font-weight:800;line-height:1;letter-spacing:-.03em}
+  .selo .t{font-size:.78rem;text-transform:uppercase;letter-spacing:.08em;opacity:.85;font-weight:700}
+  .selo .d{font-size:1.05rem;font-weight:600;margin-top:2px}
+  .ods > .container > p{max-width:560px;margin:22px auto 0;color:var(--tinta-suave)}
+
+  /* ===== RODAPÉ ===== */
+  footer{background:var(--tinta);color:#c9d2cc;padding:38px 0;text-align:center;font-size:.88rem}
+  footer .marca{color:#fff;font-weight:700;margin-bottom:6px;font-size:1rem}
+  footer a{color:#8fd396;text-decoration:none}
+
+  /* animação de entrada */
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .7s ease,transform .7s ease}
+  .reveal.vis{opacity:1;transform:none}
+
+  /* ===== RESPONSIVO ===== */
+  @media(max-width:880px){
+    .hero-grid{grid-template-columns:1fr;gap:36px}
+    .hero h1{font-size:2.4rem}
+    .metricas{grid-template-columns:repeat(2,1fr)}
+    .conexao-grid{grid-template-columns:1fr;gap:34px}
+    .conexao .texto{order:2}
+  }
+  @media(max-width:480px){
+    .metricas{grid-template-columns:1fr}
+    .hero h1{font-size:2rem}
+    .selo{flex-direction:column;align-items:flex-start;gap:10px}
+  }
+  @media(prefers-reduced-motion:reduce){
+    *{animation:none!important;transition:none!important}
+    .reveal{opacity:1;transform:none}
+  }
+</style>
 </head>
 <body>
 
-    <header>
-        <h1>🛰️ EcoOrbit</h1>
-        <p>Solução Cloud para Monitoramento de Dados Orbitais e Combate ao Desmatamento  teste deploy 2</p>
-    </header>
+<header>
+  <div class="container nav">
+    <div class="logo"><span class="orb"></span> EcoOrbit</div>
+    <span class="nav-tag">Global Solution 2026 · Indústria Espacial</span>
+  </div>
+</header>
 
-    <div class="container">
-        <div class="section">
-            <h2>Sobre a Solução e Conexão Espacial</h2>
-            <p>O <strong>EcoOrbit</strong> é uma plataforma arquitetada em nuvem projetada para processar dados de sensoriamento remoto provenientes de constelações de satélites (como a série Sentinel).</p>
-            <p>Nosso foco principal é o cumprimento da <span class="badge">ODS 15 - Vida Terrestre</span>, monitorando a saúde da cobertura vegetal, identificando clareiras ilegais em tempo real e fornecendo dados analíticos para órgãos de preservação ambiental.</p>
-        </div>
-
-        <div class="section">
-            <h2>Telemetria e Dados do Satélite (Simulado)</h2>
-            <p>Dados processados via pipeline de microsserviços na nuvem:</p>
-            <div class="grid">
-                <div class="data-card">
-                    <strong>Status da Conexão:</strong>
-                    <span>{{ dados.status_satelite }}</span>
-                </div>
-                <div class="data-card">
-                    <strong>Última Varredura:</strong>
-                    <span>{{ dados.ultima_atualizacao }}</span>
-                </div>
-                <div class="data-card">
-                    <strong>Foco de Monitoramento:</strong>
-                    <span>{{ dados.regiao_critica }}</span>
-                </div>
-                <div class="data-card">
-                    <strong>Índice NDVI Médio:</strong>
-                    <span>{{ dados.indice_ndvi_medio }}</span>
-                </div>
-            </div>
-        </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="container hero-grid">
+    <div>
+      <span class="eyebrow">Monitoramento climático orbital</span>
+      <h1>Dados de satélite a serviço da <span class="destaque">ação climática</span>.</h1>
+      <p class="lead">A EcoOrbit transforma o fluxo contínuo de dados de satélites de observação da Terra em indicadores climáticos claros — apoiando decisões de mitigação e adaptação às mudanças do clima.</p>
+      <div class="cta-row">
+        <a href="#painel" class="btn btn-primary">Ver indicadores ↓</a>
+        <a href="#missao" class="btn btn-ghost">Nossa missão</a>
+      </div>
     </div>
+    <div class="anomalia reveal">
+      <div class="topo">
+        <span class="rotulo">Anomalia térmica global</span>
+        <span class="pulso"><span class="dot"></span> ao vivo</span>
+      </div>
+      <div class="valor">+1.43<span>°C</span></div>
+      <div class="sub">acima da média pré-industrial (1850–1900)</div>
+      <div class="barra-termica"><span class="marcador"></span></div>
+      <div class="escala"><span>0 °C</span><span>+1.5 °C (Meta de Paris)</span><span>+2 °C</span></div>
+    </div>
+  </div>
+</section>
 
-    <footer>
-        <p>Projeto Secure DevOps & Cloud Computing | Desenvolvido para a Global Solution</p>
-    </footer>
+<!-- DASHBOARD -->
+<section class="dashboard" id="painel">
+  <div class="container">
+    <div class="secao-titulo reveal">
+      <span class="eyebrow">Telemetria orbital · dados simulados</span>
+      <h2>Painel de monitoramento climático</h2>
+      <p>Indicadores processados a partir de constelações de satélites em órbita baixa, atualizados continuamente pela pipeline de dados da EcoOrbit.</p>
+    </div>
+    <div class="metricas">
+      <div class="card verde reveal">
+        <div class="icone">🌳</div>
+        <div class="num" data-alvo="0.78" data-dec="2">0.00</div>
+        <div class="nome">Índice de cobertura vegetal</div>
+        <div class="desc">NDVI médio — vegetação densa e saudável</div>
+      </div>
+      <div class="card azul reveal">
+        <div class="icone">🛰️</div>
+        <div class="num" data-alvo="419" data-suf=" ppm">0</div>
+        <div class="nome">Concentração de CO₂</div>
+        <div class="desc">Medição atmosférica via sensoriamento remoto</div>
+      </div>
+      <div class="card ambar reveal">
+        <div class="icone">🔥</div>
+        <div class="num" data-alvo="6639">0</div>
+        <div class="nome">Anomalias térmicas ativas</div>
+        <div class="desc">Focos de calor detectados no globo (24h)</div>
+      </div>
+      <div class="card verde reveal">
+        <div class="icone">📡</div>
+        <div class="num" data-alvo="100" data-suf="%">0</div>
+        <div class="nome">Disponibilidade do sistema</div>
+        <div class="desc">Pipeline operacional — orbitando LEO</div>
+      </div>
+    </div>
+  </div>
+</section>
 
+<!-- CONEXÃO ESPACIAL -->
+<section class="conexao" id="missao">
+  <div class="container conexao-grid">
+    <div class="orbita-vis reveal">
+      <div class="anel a1"><span class="satelite"></span></div>
+      <div class="anel a2"><span class="satelite s2"></span></div>
+      <div class="planeta"></div>
+    </div>
+    <div class="texto reveal">
+      <h2>Da órbita à decisão climática</h2>
+      <p>Satélites de observação da Terra geram diariamente um volume massivo de dados sobre temperatura, gases de efeito estufa e eventos extremos. Sozinhos, são apenas números. A EcoOrbit os transforma em informação acionável.</p>
+      <ul class="lista-check">
+        <li><span class="mk">✓</span> Captura contínua de dados de sensoriamento remoto em órbita baixa (LEO).</li>
+        <li><span class="mk">✓</span> Processamento em nuvem com pipeline automatizada e monitoramento em tempo real.</li>
+        <li><span class="mk">✓</span> Indicadores que apoiam mitigação, adaptação e alerta precoce de riscos climáticos.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- SELO ODS 13 -->
+<section class="ods">
+  <div class="container">
+    <div class="selo reveal">
+      <span class="n">13</span>
+      <span>
+        <span class="t">Objetivo de Desenvolvimento Sustentável</span>
+        <span class="d">Ação Climática — medidas urgentes contra a mudança do clima</span>
+      </span>
+    </div>
+    <p>A EcoOrbit foi concebida como contribuição direta ao ODS 13, levando tecnologia espacial para o combate às mudanças climáticas de forma acessível, transparente e contínua.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="marca">EcoOrbit</div>
+    <div>Projeto Secure DevOps &amp; Cloud Computing · Global Solution 2026 · FIAP</div>
+    <div style="margin-top:6px;opacity:.7">Hospedado em Microsoft Azure · CI/CD via GitHub Actions</div>
+  </div>
+</footer>
+
+<script>
+  // Contadores animados
+  function animaNumero(el){
+    const alvo=parseFloat(el.dataset.alvo);
+    const dec=parseInt(el.dataset.dec||"0");
+    const suf=el.dataset.suf||"";
+    const dur=1400;const ini=performance.now();
+    function passo(t){
+      const p=Math.min((t-ini)/dur,1);
+      const eased=1-Math.pow(1-p,3);
+      const val=(alvo*eased).toFixed(dec);
+      el.textContent=Number(val).toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf;
+      if(p<1)requestAnimationFrame(passo);
+      else el.textContent=alvo.toLocaleString('pt-BR',{minimumFractionDigits:dec,maximumFractionDigits:dec})+suf;
+    }
+    requestAnimationFrame(passo);
+  }
+  // Reveal on scroll
+  const obs=new IntersectionObserver((entries)=>{
+    entries.forEach(e=>{
+      if(e.isIntersecting){
+        e.target.classList.add('vis');
+        e.target.querySelectorAll('.num[data-alvo]').forEach(animaNumero);
+        if(e.target.matches('.num[data-alvo]'))animaNumero(e.target);
+        obs.unobserve(e.target);
+      }
+    });
+  },{threshold:.15});
+  document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+  // Fallback: garante visibilidade após 2.5s caso o observer não dispare
+  setTimeout(()=>{
+    document.querySelectorAll('.reveal:not(.vis)').forEach(el=>{
+      el.classList.add('vis');
+      el.querySelectorAll('.num[data-alvo]').forEach(animaNumero);
+    });
+  },2500);
+</script>
 </body>
 </html>
